@@ -1,0 +1,111 @@
+#include <iostream>
+#include <experimental/random>
+using namespace std;
+
+int uncovered[10][10];
+int grid[10][10];
+
+
+#define unseen 0
+#define mine 1
+#define nomine 2
+
+int main() 
+{
+//Setting other variables
+int userinput=0;;
+int distance[10];
+int shortdist=100;
+int distcounter=0;
+int dist1=0;
+int dist2=0;
+//Initialise Array--------------------------------------------------------
+for (int row=0;row<10;row++)
+  {
+    for (int column=0;column<10;column++)
+    {
+      uncovered[row][column]= 0,0;
+      grid[row][column]=0,0;
+      distance[column]=0;
+    }
+    //Create Mines
+    int x = experimental::randint(0, 10);
+    int y = experimental::randint(0, 10);
+   //PROBLEM IF X,Y IS ALREADY A MINE THEN HOW?!
+    if (grid[x][y]==mine)
+    {
+    while (grid[x][y]==mine)
+      {
+        int x = experimental::randint(0, 10);
+        int y = experimental::randint(0, 10);
+      }
+    }
+    grid[x][y] = mine;
+
+  }
+      // grid[3][4]=mine;
+//------------------------------------------------------------------------
+//Print out starting board------------------------------------------------
+for (int row=0;row<10;row++)
+  {
+    for (int column=0;column<10;column++)
+    {
+      cout << row << column << " ";
+    }
+  cout << endl;
+  }
+//------------------------------------------------------------------------
+for (int turn=0;turn<20;turn++)
+{
+    cout << "Input a 2 digit value to uncover mine: ";
+    cin>>userinput;
+    if (grid[userinput/10][userinput%10]==mine)
+    uncovered[userinput/10][userinput%10]=mine;
+    else
+    uncovered[userinput/10][userinput%10]=nomine;
+    for (int row=0;row<10;row++)
+      {
+        for (int column=0;column<10;column++)
+        {
+          if(uncovered[row][column]==unseen)
+          cout << row << column << " ";
+          else if (uncovered[row][column]==mine)
+          cout << "YY" " ";
+          else
+          {
+          cout << "__ ";     
+          }
+        }
+      cout << endl;
+      }
+
+    //Calculate closest mine
+    for (int row=0;row<10;row++)
+      {
+        for (int column=0;column<10;column++)
+        {
+          if(grid[row][column]==mine)
+          {
+            dist1 = (userinput/10)-row;
+            dist1 = abs(dist1);
+            dist2 = (userinput%10)-column;
+            dist2 = abs(dist2);
+            distance[distcounter]=dist1+dist2;
+            distcounter++;
+          }
+        }
+      }
+    
+    for (int i=0;i<10;i++)
+    {
+      if (shortdist>distance[i] && distance[i]!=0)
+      {
+        shortdist=distance[i];
+      }
+    }
+
+cout << "Nearest mine is " << shortdist << " tiles away" << endl;
+}
+//------------------------------------------------------------------------
+cout << endl;
+}
